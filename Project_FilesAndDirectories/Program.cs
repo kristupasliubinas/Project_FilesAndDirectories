@@ -11,16 +11,23 @@ namespace Project_FilesAndDirectories
     {
         static void Main(string[] args)
         {
-            // Get participants
+            var rootDirectory = $"C:{Path.DirectorySeparatorChar}Users{Path.DirectorySeparatorChar}KLiubinas{Path.DirectorySeparatorChar}source{Path.DirectorySeparatorChar}repos{Path.DirectorySeparatorChar}Project_FilesAndDirectories{Path.DirectorySeparatorChar}Project_FilesAndDirectories{Path.DirectorySeparatorChar}CharityMatch{Path.DirectorySeparatorChar}";
+            var participantsDirectory = Path.Combine(rootDirectory, "Participants");
+
 
             // Create a new directory for the final file
+            Directory.CreateDirectory(Path.Combine(rootDirectory, "MatchLineUp"));
+
+
+            // Get participants
+            var nomineeFiles = FindNomineeFiles(participantsDirectory);
 
             // Write final line-up in a txt file
 
 
-            var currentDircotry = $"C:{Path.DirectorySeparatorChar}Users{Path.DirectorySeparatorChar}KLiubinas{Path.DirectorySeparatorChar}source{Path.DirectorySeparatorChar}repos{Path.DirectorySeparatorChar}Project_FilesAndDirectories{Path.DirectorySeparatorChar}Project_FilesAndDirectories{Path.DirectorySeparatorChar}CharityMatch{Path.DirectorySeparatorChar}Participants";
 
-            var nomineeFiles = FindNomineeFiles(currentDircotry);
+
+
 
         }
 
