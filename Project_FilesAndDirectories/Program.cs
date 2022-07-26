@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Project_FilesAndDirectories
 {
@@ -15,18 +16,14 @@ namespace Project_FilesAndDirectories
             var participantsDirectory = Path.Combine(rootDirectory, "Participants");
 
 
-            // Create a new directory for the final file
+            // Create a new directory for the output file
             Directory.CreateDirectory(Path.Combine(rootDirectory, "MatchLineUp"));
 
 
-            // Get participants
+            // Read each participant and write to the output file
             var nomineeFiles = FindNomineeFiles(participantsDirectory);
 
-            // Write final line-up in a txt file
-
-
-
-
+            CreateFinalLineUp(nomineeFiles);
 
 
         }
@@ -45,6 +42,17 @@ namespace Project_FilesAndDirectories
             }
 
             return nomineeFiles;
+        }
+
+        static void CreateFinalLineUp(IEnumerable<string> nomineeFiles) 
+        {
+            foreach (var file in nomineeFiles) 
+            {
+                // Read
+                var nomineeJson = File.ReadAllText(file);
+                // Parse
+                //var nomineeData
+            }
         }
     }
 }
