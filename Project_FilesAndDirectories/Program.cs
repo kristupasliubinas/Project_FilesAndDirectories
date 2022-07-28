@@ -24,8 +24,6 @@ namespace Project_FilesAndDirectories
             var nomineeFiles = FindNomineeFiles(participantsDirectory);
 
             CreateFinalLineUp(nomineeFiles);
-
-
         }
 
         static IEnumerable<string> FindNomineeFiles(string directory)
@@ -46,13 +44,23 @@ namespace Project_FilesAndDirectories
 
         static void CreateFinalLineUp(IEnumerable<string> nomineeFiles) 
         {
+            var playerNumber = 1;
             foreach (var file in nomineeFiles) 
             {
                 // Read
                 var nomineeJson = File.ReadAllText(file);
                 // Parse
-                //var nomineeData
+                var nomineeData = JsonConvert.DeserializeObject<Player>(nomineeJson);
+                // Print
+                Console.WriteLine($"Player {playerNumber}: {nomineeData.Forename} {nomineeData.Surname}");
+                playerNumber++;
             }
         }
+    }
+
+    class Player 
+    {
+        public string Forename { get; set; }
+        public string Surname { get; set; }
     }
 }
