@@ -17,13 +17,13 @@ namespace Project_FilesAndDirectories
 
 
             // Create a new directory for the output file
-            Directory.CreateDirectory(Path.Combine(rootDirectory, "MatchLineUp"));
-
+            var finalLineUpDirectory = Path.Combine(rootDirectory, "MatchLineUp");
+            Directory.CreateDirectory(finalLineUpDirectory);
+            var finalLineUpFile = Path.Combine(finalLineUpDirectory, "finalMatchLineUp.txt");
 
             // Read each participant and write to the output file
             var nomineeFiles = FindNomineeFiles(participantsDirectory);
-
-            CreateFinalLineUp(nomineeFiles);
+            CreateFinalLineUp(nomineeFiles, finalLineUpFile);
         }
 
         static IEnumerable<string> FindNomineeFiles(string directory)
@@ -42,45 +42,51 @@ namespace Project_FilesAndDirectories
             return nomineeFiles;
         }
 
-        static void CreateFinalLineUp(IEnumerable<string> nomineeFiles) 
+        static void CreateFinalLineUp(IEnumerable<string> nomineeFiles, string finalLineUpFile) 
         {
             var playerNumber = 1;
             var teamNumber = 1;
             
-            foreach (var file in nomineeFiles) 
+            foreach (var nomineeFile in nomineeFiles) 
             {
                 if (playerNumber == 1 || playerNumber == 21)
                 {
-                    if (playerNumber == 21) Console.WriteLine("\n");
-                    Console.WriteLine($"**TEAM {teamNumber}**\n");
-                    Console.WriteLine("Starters:\n" + "-------------------");
-                    parsePlayer(file);
+                    if (playerNumber == 21) 
+                        //Console.WriteLine("\n");
+                        File.AppendAllText(finalLineUpFile, "\n\n");
+                    //Console.WriteLine($"**TEAM {teamNumber}**\n");
+                    File.AppendAllText(finalLineUpFile, $"**TEAM {teamNumber}**\n");
+                    //Console.WriteLine("Starters:\n" + "-------------------");
+                    File.AppendAllText(finalLineUpFile, "\nStarters:\n" + "-------------------\n");
+                    parsePlayer(nomineeFile, finalLineUpFile);
                     playerNumber++;
                 }
                 else if (playerNumber == 12 || playerNumber == 32)
                 {
-                    Console.WriteLine("\n" + "Reserves:" + "\n" + "-------------------");
-                    parsePlayer(file);
+                    //Console.WriteLine("\n" + "Reserves:" + "\n" + "-------------------");
+                    File.AppendAllText(finalLineUpFile, "\n" + "Reserves:" + "\n" + "-------------------" + "\n");
+                    parsePlayer(nomineeFile, finalLineUpFile);
                     playerNumber++;
                     teamNumber++;
                 }
                 else 
                 {
-                    parsePlayer(file);
+                    parsePlayer(nomineeFile, finalLineUpFile);
                     playerNumber++;
                 }
 
             }
         }
 
-        static void parsePlayer(string file) 
+        static void parsePlayer(string nomineeFile, string finalLineUpFile) 
         {
             // Read
-            var nomineeJson = File.ReadAllText(file);
+            var nomineeJson = File.ReadAllText(nomineeFile);
             // Parse
             var nomineeData = JsonConvert.DeserializeObject<Player>(nomineeJson);
             // Print
-            Console.WriteLine($"{nomineeData.Forename} {nomineeData.Surname}");
+            //Console.WriteLine($"{nomineeData.Forename} {nomineeData.Surname}");
+            File.AppendAllText(finalLineUpFile, $"{nomineeData.Forename} {nomineeData.Surname}\n");
         }
     }
 
