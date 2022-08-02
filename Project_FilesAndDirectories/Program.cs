@@ -45,16 +45,42 @@ namespace Project_FilesAndDirectories
         static void CreateFinalLineUp(IEnumerable<string> nomineeFiles) 
         {
             var playerNumber = 1;
+            var teamNumber = 1;
+            
             foreach (var file in nomineeFiles) 
             {
-                // Read
-                var nomineeJson = File.ReadAllText(file);
-                // Parse
-                var nomineeData = JsonConvert.DeserializeObject<Player>(nomineeJson);
-                // Print
-                Console.WriteLine($"Player {playerNumber}: {nomineeData.Forename} {nomineeData.Surname}");
-                playerNumber++;
+                if (playerNumber == 1 || playerNumber == 21)
+                {
+                    if (playerNumber == 21) Console.WriteLine("\n");
+                    Console.WriteLine($"**TEAM {teamNumber}**\n");
+                    Console.WriteLine("Starters:\n" + "-------------------");
+                    parsePlayer(file);
+                    playerNumber++;
+                }
+                else if (playerNumber == 12 || playerNumber == 32)
+                {
+                    Console.WriteLine("\n" + "Reserves:" + "\n" + "-------------------");
+                    parsePlayer(file);
+                    playerNumber++;
+                    teamNumber++;
+                }
+                else 
+                {
+                    parsePlayer(file);
+                    playerNumber++;
+                }
+
             }
+        }
+
+        static void parsePlayer(string file) 
+        {
+            // Read
+            var nomineeJson = File.ReadAllText(file);
+            // Parse
+            var nomineeData = JsonConvert.DeserializeObject<Player>(nomineeJson);
+            // Print
+            Console.WriteLine($"{nomineeData.Forename} {nomineeData.Surname}");
         }
     }
 
