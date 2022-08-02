@@ -13,16 +13,14 @@ namespace Project_FilesAndDirectories
         static void Main(string[] args)
         {
             var rootDirectory = $"C:{Path.DirectorySeparatorChar}Users{Path.DirectorySeparatorChar}KLiubinas{Path.DirectorySeparatorChar}source{Path.DirectorySeparatorChar}repos{Path.DirectorySeparatorChar}Project_FilesAndDirectories{Path.DirectorySeparatorChar}Project_FilesAndDirectories{Path.DirectorySeparatorChar}CharityMatch{Path.DirectorySeparatorChar}";
+            
             var participantsDirectory = Path.Combine(rootDirectory, "Participants");
+            var nomineeFiles = FindNomineeFiles(participantsDirectory);
 
-
-            // Create a new directory for the output file
             var finalLineUpDirectory = Path.Combine(rootDirectory, "MatchLineUp");
             Directory.CreateDirectory(finalLineUpDirectory);
             var finalLineUpFile = Path.Combine(finalLineUpDirectory, "finalMatchLineUp.txt");
 
-            // Read each participant and write to the output file
-            var nomineeFiles = FindNomineeFiles(participantsDirectory);
             CreateFinalLineUp(nomineeFiles, finalLineUpFile);
         }
 
@@ -51,19 +49,14 @@ namespace Project_FilesAndDirectories
             {
                 if (playerNumber == 1 || playerNumber == 21)
                 {
-                    if (playerNumber == 21) 
-                        //Console.WriteLine("\n");
-                        File.AppendAllText(finalLineUpFile, "\n\n");
-                    //Console.WriteLine($"**TEAM {teamNumber}**\n");
+                    if (playerNumber == 21) File.AppendAllText(finalLineUpFile, "\n\n");
                     File.AppendAllText(finalLineUpFile, $"**TEAM {teamNumber}**\n");
-                    //Console.WriteLine("Starters:\n" + "-------------------");
                     File.AppendAllText(finalLineUpFile, "\nStarters:\n" + "-------------------\n");
                     parsePlayer(nomineeFile, finalLineUpFile);
                     playerNumber++;
                 }
                 else if (playerNumber == 12 || playerNumber == 32)
                 {
-                    //Console.WriteLine("\n" + "Reserves:" + "\n" + "-------------------");
                     File.AppendAllText(finalLineUpFile, "\n" + "Reserves:" + "\n" + "-------------------" + "\n");
                     parsePlayer(nomineeFile, finalLineUpFile);
                     playerNumber++;
@@ -84,8 +77,7 @@ namespace Project_FilesAndDirectories
             var nomineeJson = File.ReadAllText(nomineeFile);
             // Parse
             var nomineeData = JsonConvert.DeserializeObject<Player>(nomineeJson);
-            // Print
-            //Console.WriteLine($"{nomineeData.Forename} {nomineeData.Surname}");
+            // Write to file
             File.AppendAllText(finalLineUpFile, $"{nomineeData.Forename} {nomineeData.Surname}\n");
         }
     }
